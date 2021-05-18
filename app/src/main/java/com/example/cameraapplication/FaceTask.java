@@ -119,10 +119,10 @@ public class FaceTask extends AsyncTask {
                         if (!check) {
                             Looper.prepare();
 //                        toast = Toast.makeText(SurfaceViewCallback.getInstacne().context, "Get the Blind way.", Toast.LENGTH_LONG);
-                            toast.setText("Get the Blind way.");
+                            toast.setText("盲道出现");
                             toast.setGravity(Gravity.CENTER, 0, 0);
 //                        toast.show();
-                            showMyToast(toast, 100);
+                            showMyToast(toast, 500);
                             check = true;
                             Looper.loop();
                         }
@@ -132,10 +132,10 @@ public class FaceTask extends AsyncTask {
 
                         if (check) {
                             Looper.prepare();
-                            toast = Toast.makeText(SurfaceViewCallback.getInstance().context, "Can not find the Blind way.", Toast.LENGTH_SHORT);
+                            toast = Toast.makeText(SurfaceViewCallback.getInstance().context, "盲道消失", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
 //                        toast.show();
-                            showMyToast(toast, 100);
+                            showMyToast(toast, 500);
                             check = false;
                             Looper.loop();
                         }

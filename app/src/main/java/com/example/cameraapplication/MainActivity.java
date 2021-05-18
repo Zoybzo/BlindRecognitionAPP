@@ -30,10 +30,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mPermissionList = new ArrayList<>();
-        getPermission();
-
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
+        getPermission();
         initView();
     }
 
@@ -83,10 +82,42 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+//        if (requestCode == 1) {
+//            int cnt = 0;
+//            String[] str = new String[(int) permissions.length];
+//            for (int i = 0; i < permissions.length; i++) {
+//                if (grantResults[i] != 0) str[cnt++] = permissions[i];
+//            }
+//
+//            if (cnt != 0) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                builder.setTitle("授权");
+//                builder.setMessage("需要允许授权才可使用");
+//                builder.setPositiveButton("去允许", (dialog, id) -> {
+//                    if (mDialog != null && mDialog.isShowing()) {
+//                        mDialog.dismiss();
+//                    }
+//                    ActivityCompat.requestPermissions(MainActivity.this,
+//                            str, 1);
+//                });
+//                mDialog = builder.create();
+//                mDialog.setCanceledOnTouchOutside(false);
+//                mDialog.show();
+//            } else {
+//                // 重启
+//            }
+//        }
+
+        //TODO: A new method to request permissions.
+
+
+
         if (requestCode == 1) {
+            boolean flag = true;
             for (int i = 0; i < permissions.length; i++) {
                 //已授权
                 if (grantResults[i] == 0) {
+                    flag = false;
                     continue;
                 }
 
@@ -95,12 +126,13 @@ public class MainActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("授权");
                     builder.setMessage("需要允许授权才可使用");
+                    String str = permissions[i];
                     builder.setPositiveButton("去允许", (dialog, id) -> {
                         if (mDialog != null && mDialog.isShowing()) {
                             mDialog.dismiss();
                         }
                         ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                                new String[]{str}, 1);
                     });
                     mDialog = builder.create();
                     mDialog.setCanceledOnTouchOutside(false);
@@ -124,6 +156,9 @@ public class MainActivity extends AppCompatActivity {
                     mDialog.setCanceledOnTouchOutside(false);
                     mDialog.show();
                 }
+            }
+            if (flag) {
+                initView();
             }
         }
     }
