@@ -14,7 +14,7 @@ import java.security.Policy;
 import java.util.List;
 
 public class SurfaceViewCallback implements SurfaceHolder.Callback, Camera.PreviewCallback {
-    Context context;
+    private Context context;
     private static final String TAG = "Camera";
     private FrontCamera mFrontCamera = null;
     private boolean previewing = false;
@@ -26,6 +26,10 @@ public class SurfaceViewCallback implements SurfaceHolder.Callback, Camera.Previ
         super();
         mFrontCamera = new FrontCamera();
         previewing = mFrontCamera.getPreviewing();
+    }
+
+    public Context getContext() {
+        return this.context;
     }
 
     public void setContext(Context context) {

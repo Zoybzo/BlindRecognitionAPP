@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
@@ -19,22 +21,60 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.Manifest;
-import android.widget.Toast;
+import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity {
+    private static Enums.Method methodNum = Enums.Method.ToastMessage;
 
-    Context context = MainActivity.this;
-    SurfaceView surfaceView;
-    CameraSurfaceHolder mCameraSurfaceHolder = new CameraSurfaceHolder();
+    private Context context = MainActivity.this;
+    private SurfaceView surfaceView;
+    private CameraSurfaceHolder mCameraSurfaceHolder = new CameraSurfaceHolder();
+    private FrameLayout container;
+    private AlertDialog mDialog;
+
+    Enums.Method[] methodNames = {Enums.Method.ToastMessage, Enums.Method.VibratorMessage, Enums.Method.VideoMessage};
+    final Integer[] methods = {R.id.ToastMessage, R.id.VibratorMessage, R.id.VideoMessage};
+    private int methodId = R.id.ToastMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mPermissionList = new ArrayList<>();
+
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
+        setContentView(container = new FrameLayout(this));
+
         getPermission();
         initView();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.methods, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        methodId = item.getItemId();
+        Log.e("methodId", String.valueOf(methodId));
+        switch (methodId) {
+            case R.id.ToastMessage:
+                methodNum = methodNames[0];
+                break;
+            case R.id.VibratorMessage:
+                methodNum = methodNames[1];
+                break;
+            case R.id.VideoMessage:
+                methodNum = methodNames[2];
+                break;
+        }
+        return true;
+    }
+
+    public static Enums.Method getMethodNum() {
+        return methodNum;
+    }
+
 
     public void initView() {
         setContentView(R.layout.activity_main);
@@ -61,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         //未授予的权限为空，表示都授予了
+
         if (mPermissionList.isEmpty()) {
 
             Log.d("Permission", "Successful");
@@ -72,70 +113,12 @@ public class MainActivity extends AppCompatActivity {
             String[] permissions = mPermissionList.toArray(new String[0]);
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         }
+
     }
-
-    private AlertDialog mDialog;
-    private static final int PERMISSION_REQUEST_CODE = 200;
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-//        switch (requestCode) {
-//            case PERMISSION_REQUEST_CODE:
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.length > 0 &&
-//                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    // Permission is granted. Continue the action or workflow
-//                    // in your app.
-//                } else {
-//                    // Explain to the user that the feature is unavailable because
-//                    // the features requires a permission that the user has denied.
-//                    // At the same time, respect the user's decision. Don't link to
-//                    // system settings in an effort to convince the user to change
-//                    // their decision.
-//                }
-//                return;
-//        }
-//        // Other 'case' lines to check for other
-//        // permissions this app might request.
-//    }
-//}
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-//        if (requestCode == 1) {
-//            int cnt = 0;
-//            String[] str = new String[(int) permissions.length];
-//            for (int i = 0; i < permissions.length; i++) {
-//                if (grantResults[i] != 0) str[cnt++] = permissions[i];
-//            }
-//
-//            if (cnt != 0) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                builder.setTitle("授权");
-//                builder.setMessage("需要允许授权才可使用");
-//                builder.setPositiveButton("去允许", (dialog, id) -> {
-//                    if (mDialog != null && mDialog.isShowing()) {
-//                        mDialog.dismiss();
-//                    }
-//                    ActivityCompat.requestPermissions(MainActivity.this,
-//                            str, 1);
-//                });
-//                mDialog = builder.create();
-//                mDialog.setCanceledOnTouchOutside(false);
-//                mDialog.show();
-//            } else {
-//                // 重启
-//            }
-//        }
-
-        //TODO: A new method to request permissions.
-
-
-
-
 
         if (requestCode == 1) {
             for (int i = 0; i < permissions.length; i++) {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/ToastMessage"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="文本框" />
+
+    <item
+        android:id="@+id/VideoMessage"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="语音" />
+
+    <item
+        android:id="@+id/VibratorMessage"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="振动" />
+
+</menu>

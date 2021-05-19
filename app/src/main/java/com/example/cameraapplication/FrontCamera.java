@@ -7,10 +7,6 @@ import android.hardware.Camera;
 import android.util.Log;
 import android.view.Surface;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.security.Policy;
-
 public class FrontCamera {
     static final String TAG = "Camera";
     Camera mCamera;

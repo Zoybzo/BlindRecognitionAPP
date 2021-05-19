@@ -6,6 +6,10 @@ import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -15,9 +19,10 @@ import android.os.Looper;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+
+import java.util.Locale;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -29,18 +34,20 @@ import okhttp3.Response;
 
 import com.alibaba.fastjson.*;
 
+import static android.content.Context.VIBRATOR_SERVICE;
+import static com.example.cameraapplication.myToast.showMyToast;
+
 
 public class FaceTask extends AsyncTask {
+    private static final String myUrl = "http://82.157.104.222:5000/blinds";
+    public static boolean check = false;
+    private static final String TAG = "CameraTAG";
+
     private byte[] mData;
     private Bitmap raw_bitmap;
     private String base64_global;
+    private Camera mCamera;
 
-    public static boolean check = false;
-    private static final String myUrl = "http://82.157.104.222:5000/blinds";
-    private static final String TAG = "CameraTAG";
-    private static Toast toast = Toast.makeText(SurfaceViewCallback.getInstance().context, "", Toast.LENGTH_LONG);
-
-    Camera mCamera;
     private static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .connectTimeout(1000, TimeUnit.SECONDS)
             .readTimeout(1000, TimeUnit.SECONDS)
@@ -80,7 +87,6 @@ public class FaceTask extends AsyncTask {
         // TODO: Arguments?
         Rect rect = new Rect(0, 0, w, h);
         YuvImage yuvImage = new YuvImage(mData, imageFormat, w, h, null);
-//        Log.i("Image", "width:" + w + " height:" + h);
 
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -103,43 +109,14 @@ public class FaceTask extends AsyncTask {
                     e.printStackTrace();
                 }
 
+                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     assert response.body() != null;
                     String result = response.body().string();
-
                     Log.d(TAG + "Response", "out result===" + result);
                     Log.d(TAG + "Response", response.code() + "");
-
-                    Log.e("check", check ? "True" : "False");
-
-                    if (JudgeAns(result)) {
-                        Log.e("Response", "Blind");
-
-                        if (!check) {
-                            Looper.prepare();
-//                        toast = Toast.makeText(SurfaceViewCallback.getInstacne().context, "Get the Blind way.", Toast.LENGTH_LONG);
-                            toast.setText("盲道出现");
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-//                        toast.show();
-                            showMyToast(toast, 500);
-                            check = true;
-                            Looper.loop();
-                        }
-
-                    } else {
-                        Log.e("Response", "Others");
-
-                        if (check) {
-                            Looper.prepare();
-                            toast = Toast.makeText(SurfaceViewCallback.getInstance().context, "盲道消失", Toast.LENGTH_SHORT);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-//                        toast.show();
-                            showMyToast(toast, 500);
-                            check = false;
-                            Looper.loop();
-                        }
-                    }
+                    getMethod(JudgeAns(result));
                 }
             });
         } catch (Exception e) {
@@ -173,21 +150,90 @@ public class FaceTask extends AsyncTask {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
-    public void showMyToast(final Toast toast, final int cnt) {
-        final Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                toast.show();
-            }
-        }, 0, 3000);
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                toast.cancel();
-                timer.cancel();
-            }
-        }, cnt);
-    }
+    private static final String appearContent = "盲道出现";
+    private static final String disappearContent = "盲道消失";
+    private static Toast toast = Toast.makeText(SurfaceViewCallback.getInstance().getContext(), "", Toast.LENGTH_LONG);
+    private static Vibrator v = (Vibrator) SurfaceViewCallback.getInstance().getContext().getSystemService(VIBRATOR_SERVICE);
+    private static TextToSpeech textToSpeech = new TextToSpeech(SurfaceViewCallback.getInstance().getContext(), new TextToSpeech.OnInitListener() {
+        @Override
+        public void onInit(int status) {
+            if (status == TextToSpeech.SUCCESS) {
+                int result = textToSpeech.setLanguage(Locale.CHINESE);
 
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Toast.makeText(SurfaceViewCallback.getInstance().getContext(), "This language is not supported", Toast.LENGTH_LONG).show();
+
+                } else {
+                    textToSpeech.setPitch(0.6f);
+                    textToSpeech.setSpeechRate(1.3f);
+                }
+            }
+        }
+    });
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void getMethod(boolean appear) {
+        switch (MainActivity.getMethodNum()) {
+            case ToastMessage: {
+                if (appear) {
+                    Log.e("Response", "Blind");
+                    if (!check) {
+                        Looper.prepare();
+                        toast.setText(appearContent);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        showMyToast(toast, 500);
+                        check = true;
+                        Looper.loop();
+                    }
+                } else {
+                    Log.e("Response", "Others");
+                    if (check) {
+                        Looper.prepare();
+                        toast.setText(disappearContent);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        showMyToast(toast, 500);
+                        check = false;
+                        Looper.loop();
+                    }
+                }
+                break;
+            }
+
+            case VideoMessage: {
+                if (appear) {
+                    Log.e("Response", "Blind");
+                    if (!check) {
+                        textToSpeech.speak(appearContent, TextToSpeech.QUEUE_ADD, null);
+                        check = true;
+                    }
+                } else {
+                    Log.e("Response", "Others");
+                    if (check) {
+                        textToSpeech.speak(disappearContent, TextToSpeech.QUEUE_ADD, null);
+                        check = false;
+                    }
+                }
+
+                break;
+            }
+
+            case VibratorMessage: {
+                if (appear) {
+                    Log.e("Response", "Blind");
+                    if (!check) {
+                        v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                        check = true;
+                    }
+                } else {
+                    Log.e("Response", "Others");
+                    if (check) {
+                        v.vibrate(VibrationEffect.createOneShot(500, 255));
+                        check = false;
+                    }
+                }
+
+                break;
+            }
+        }
+    }
 }
