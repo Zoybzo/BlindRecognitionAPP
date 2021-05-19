@@ -112,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
         if (requestCode == 1) {
             boolean flag = true;
             for (int i = 0; i < permissions.length; i++) {
