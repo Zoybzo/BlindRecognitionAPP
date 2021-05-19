@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
     private final String[] permissions = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.INTERNET,
             Manifest.permission.CAMERA
     };
     private List<String> mPermissionList = null;
@@ -77,6 +75,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private AlertDialog mDialog;
+    private static final int PERMISSION_REQUEST_CODE = 200;
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        switch (requestCode) {
+//            case PERMISSION_REQUEST_CODE:
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.length > 0 &&
+//                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    // Permission is granted. Continue the action or workflow
+//                    // in your app.
+//                } else {
+//                    // Explain to the user that the feature is unavailable because
+//                    // the features requires a permission that the user has denied.
+//                    // At the same time, respect the user's decision. Don't link to
+//                    // system settings in an effort to convince the user to change
+//                    // their decision.
+//                }
+//                return;
+//        }
+//        // Other 'case' lines to check for other
+//        // permissions this app might request.
+//    }
+//}
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -115,11 +138,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (requestCode == 1) {
-            boolean flag = true;
             for (int i = 0; i < permissions.length; i++) {
                 //已授权
                 if (grantResults[i] == 0) {
-                    flag = false;
                     continue;
                 }
 
@@ -158,9 +179,6 @@ public class MainActivity extends AppCompatActivity {
                     mDialog.setCanceledOnTouchOutside(false);
                     mDialog.show();
                 }
-            }
-            if (flag) {
-                initView();
             }
         }
     }
