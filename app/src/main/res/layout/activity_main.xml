@@ -17,6 +17,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:focusable="true">
-
     </SurfaceView>
+
 </RelativeLayout>

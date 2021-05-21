@@ -1,4 +1,4 @@
-package com.example.cameraapplication;
+package com.example.Link_Eye;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +25,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import myUtils.BitmapProcess;
+import myUtils.ToBase64;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
@@ -35,7 +37,7 @@ import okhttp3.Response;
 import com.alibaba.fastjson.*;
 
 import static android.content.Context.VIBRATOR_SERVICE;
-import static com.example.cameraapplication.myToast.showMyToast;
+import static myUtils.myToast.showMyToast;
 
 
 public class FaceTask extends AsyncTask {

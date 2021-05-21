@@ -1,13 +1,24 @@
-package com.example.cameraapplication;
+package com.example.Link_Eye;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceView;
@@ -21,16 +32,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.Manifest;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import myUtils.Enums;
 
 public class MainActivity extends AppCompatActivity {
     private static Enums.Method methodNum = Enums.Method.ToastMessage;
+    private final static String titleDialog = "欢迎使用 Link-Eye 灵眸";
+    private final static String beforePrivacy = "请您在使用（或继续使用）我们的产品服务前仔细阅读";
+    private final static String afterPrivacy = "\n    您点击\"同意并继续\"，即表示您已阅读并同意以上条款。Link-Eye 灵眸将权力保证您的合法权益与信息安全，并持续为您提供更优质的服务。";
+    private static final String PREFS_NAME = "MyPrefsFile";
+    private SharedPreferences settings;
 
     private Context context = MainActivity.this;
     private SurfaceView surfaceView;
     private CameraSurfaceHolder mCameraSurfaceHolder = new CameraSurfaceHolder();
     private FrameLayout container;
     private AlertDialog mDialog;
+    private AlertDialog dialog;
 
     Enums.Method[] methodNames = {Enums.Method.ToastMessage, Enums.Method.VibratorMessage, Enums.Method.VideoMessage};
     final Integer[] methods = {R.id.ToastMessage, R.id.VibratorMessage, R.id.VideoMessage};
@@ -43,8 +67,60 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(container = new FrameLayout(this));
 
-        getPermission();
-        initView();
+        settings = getSharedPreferences(PREFS_NAME, 0);
+        if (settings.getBoolean("my_first_time", true)) {
+            Log.d("Comments", "First time");
+            getPrivacy();
+        } else {
+            getPermission();
+            initView();
+        }
+    }
+
+    void getPrivacy() {
+        dialog = new AlertDialog.Builder(context).create();
+        dialog.show();
+        dialog.setCancelable(false);
+
+        String str = "欢迎使用 Link-Eye 灵眸！我们非常重视您的个人信息和隐私保护。" +
+                "为了更好地保证您的个人权益，在您使用我们的产品前，请务必审慎阅读《隐私政策》内的所有条款。" +
+                "您点击\"同意并继续\"，即表示您已阅读并同意以上条款。Link-Eye 灵眸将权力保证您的合法权益与信息安全，并持续为您提供更优质的服务。";
+
+
+        final Window window = dialog.getWindow();
+        window.setContentView(R.layout.dialog_intimate);
+        window.setGravity(Gravity.CENTER);
+//        window.setWindowAnimations(R.style.anim_panel_up_from_bottom);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //设置属性
+        final WindowManager.LayoutParams params = window.getAttributes();
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        params.dimAmount = 0.5f;
+        window.setAttributes(params);
+
+        TextView textView = window.findViewById(R.id.tv_1);
+        TextView tvCancel = window.findViewById(R.id.tv_cancel);
+        TextView tvAgree = window.findViewById(R.id.tv_agree);
+        tvCancel.setOnClickListener(v -> {
+            dialog.cancel();
+            System.exit(0);
+        });
+        tvAgree.setOnClickListener(v -> {
+            settings.edit().putBoolean("my_first_time", false).apply();
+            dialog.cancel();
+            getPermission();
+            initView();
+        });
+        textView.setText(str);
+
+        SpannableStringBuilder ssb = new SpannableStringBuilder();
+        ssb.append(str);
+        final int start = str.indexOf("《");//第一个出现的位置
+        ssb.setSpan(new URLSpan("http://82.157.104.222:5000/privacy"), start, start + 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); //网络
+
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setText(ssb, TextView.BufferType.SPANNABLE);
     }
 
     @Override

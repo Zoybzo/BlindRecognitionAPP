@@ -1,4 +1,4 @@
-package com.example.cameraapplication;
+package myUtils;
 
 import android.widget.Toast;
 

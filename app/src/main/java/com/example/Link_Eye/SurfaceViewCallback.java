@@ -1,17 +1,14 @@
-package com.example.cameraapplication;
+package com.example.Link_Eye;
 
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
-import java.security.Policy;
-import java.util.List;
 
 public class SurfaceViewCallback implements SurfaceHolder.Callback, Camera.PreviewCallback {
     private Context context;

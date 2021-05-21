@@ -1,4 +1,4 @@
-package com.example.cameraapplication;
+package com.example.Link_Eye;
 
 import org.junit.Test;
 

@@ -1,10 +1,12 @@
-package com.example.cameraapplication;
+package com.example.Link_Eye;
 
 import android.os.Looper;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import static com.example.cameraapplication.myToast.showMyToast;
+import myUtils.Enums;
+
+import static myUtils.myToast.showMyToast;
 
 public class PromptMethod {
 
