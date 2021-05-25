@@ -47,6 +47,7 @@ public class SurfaceViewCallback implements SurfaceHolder.Callback, Camera.Previ
                     return;
                 case PENDING:
                     mFaceTask.cancel(false);
+                    mFaceTask = null;
                     break;
             }
         }

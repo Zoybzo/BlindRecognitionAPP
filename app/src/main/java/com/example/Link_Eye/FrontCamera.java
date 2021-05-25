@@ -36,7 +36,7 @@ public class FrontCamera {
         for (int camInx = 0; camInx < cameraCount; camInx++) {
             Camera.getCameraInfo(camInx, cameraInfo);
             if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
-                // TODO: For the normal use of Camera, it is necessary to surround open() with try/catch.
+                // For the normal use of Camera, it is necessary to surround open() with try/catch.
                 try {
                     Log.d(TAG, "Camera Got");
                     cam = Camera.open(camInx);

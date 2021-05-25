@@ -56,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
     Enums.Method[] methodNames = {Enums.Method.ToastMessage, Enums.Method.VibratorMessage, Enums.Method.VideoMessage};
     private int methodId = R.id.ToastMessage;
 
+    public Context getContext() {
+        return this.context;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mPermissionList = new ArrayList<>();

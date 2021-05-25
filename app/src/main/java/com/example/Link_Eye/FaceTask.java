@@ -155,7 +155,7 @@ public class FaceTask extends AsyncTask {
     private static final String appearContent = "盲道出现";
     private static final String disappearContent = "盲道消失";
     private static Toast toast = Toast.makeText(SurfaceViewCallback.getInstance().getContext(), "", Toast.LENGTH_LONG);
-    private static Vibrator v = (Vibrator) SurfaceViewCallback.getInstance().getContext().getSystemService(VIBRATOR_SERVICE);
+    private static Vibrator v = (Vibrator)SurfaceViewCallback.getInstance().getContext().getSystemService(VIBRATOR_SERVICE);
     private static TextToSpeech textToSpeech = new TextToSpeech(SurfaceViewCallback.getInstance().getContext(), new TextToSpeech.OnInitListener() {
         @Override
         public void onInit(int status) {
