@@ -50,11 +50,8 @@ public class SurfaceViewCallback implements SurfaceHolder.Callback, Camera.Previ
                     break;
             }
         }
-//        if (mFaceTask == null) {
         mFaceTask = new FaceTask(data, camera);
         mFaceTask.execute((Void) null);
-//            mFaceTask = null;
-//        } else mFaceTask.setDataAndCamera(data, camera);
     }
 
     public static SurfaceViewCallback getInstance() {
@@ -81,7 +78,7 @@ public class SurfaceViewCallback implements SurfaceHolder.Callback, Camera.Previ
         }
 
         try {
-            // TODO: notice the order there!
+            // notice the order there!
             mCamera.setPreviewDisplay(holder);
             mCamera.startPreview();
             mCamera.setPreviewCallback(this);

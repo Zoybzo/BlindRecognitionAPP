@@ -11,10 +11,6 @@ public class CameraSurfaceHolder {
     SurfaceView surfaceView;
     SurfaceViewCallback callback = SurfaceViewCallback.getInstance();
 
-//    public CameraSurfaceHolder() {
-//        callback = new SurfaceViewCallback();
-//    }
-
     /**
      * 设置相机界面SurfaceView的Holder
      * @param context 从相机所在的Activity传入的context

@@ -43,9 +43,6 @@ import myUtils.Enums;
 
 public class MainActivity extends AppCompatActivity {
     private static Enums.Method methodNum = Enums.Method.ToastMessage;
-    private final static String titleDialog = "欢迎使用 Link-Eye 灵眸";
-    private final static String beforePrivacy = "请您在使用（或继续使用）我们的产品服务前仔细阅读";
-    private final static String afterPrivacy = "\n    您点击\"同意并继续\"，即表示您已阅读并同意以上条款。Link-Eye 灵眸将权力保证您的合法权益与信息安全，并持续为您提供更优质的服务。";
     private static final String PREFS_NAME = "MyPrefsFile";
     private SharedPreferences settings;
 
@@ -57,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog dialog;
 
     Enums.Method[] methodNames = {Enums.Method.ToastMessage, Enums.Method.VibratorMessage, Enums.Method.VideoMessage};
-    final Integer[] methods = {R.id.ToastMessage, R.id.VibratorMessage, R.id.VideoMessage};
     private int methodId = R.id.ToastMessage;
 
     @Override
@@ -90,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
         final Window window = dialog.getWindow();
         window.setContentView(R.layout.dialog_intimate);
         window.setGravity(Gravity.CENTER);
-//        window.setWindowAnimations(R.style.anim_panel_up_from_bottom);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         //设置属性
         final WindowManager.LayoutParams params = window.getAttributes();
