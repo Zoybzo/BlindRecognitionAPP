@@ -114,7 +114,7 @@ public class FaceTask extends AsyncTask {
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    assert response.body() != null;
+//                    assert response.body() != null;
                     String result = response.body().string();
                     Log.d(TAG + "Response", "out result===" + result);
                     Log.d(TAG + "Response", response.code() + "");
@@ -154,8 +154,8 @@ public class FaceTask extends AsyncTask {
 
     private static final String appearContent = "盲道出现";
     private static final String disappearContent = "盲道消失";
-    private static Toast toast = Toast.makeText(SurfaceViewCallback.getInstance().getContext(), "", Toast.LENGTH_LONG);
-    private static Vibrator v = (Vibrator)SurfaceViewCallback.getInstance().getContext().getSystemService(VIBRATOR_SERVICE);
+    private static Toast toast = Toast.makeText(SurfaceViewCallback.getInstance().getContext(), "", Toast.LENGTH_SHORT);
+    private static Vibrator v = (Vibrator) SurfaceViewCallback.getInstance().getContext().getSystemService(VIBRATOR_SERVICE);
     private static TextToSpeech textToSpeech = new TextToSpeech(SurfaceViewCallback.getInstance().getContext(), new TextToSpeech.OnInitListener() {
         @Override
         public void onInit(int status) {

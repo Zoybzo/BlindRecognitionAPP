@@ -3,4 +3,7 @@
     <string name="Privacy">隐私政策</string>
     <string name="Agree">同意并继续</string>
     <string name="Disagree">暂不使用</string>
+    <string name="text">文本框</string>
+    <string name="video">语音</string>
+    <string name="vibrator">振动</string>
 </resources>

@@ -8,8 +8,12 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -24,12 +28,14 @@ import android.view.MenuItem;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.Manifest;
 import android.view.View;
@@ -128,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         methodId = item.getItemId();
@@ -135,11 +142,14 @@ public class MainActivity extends AppCompatActivity {
         switch (methodId) {
             case R.id.ToastMessage:
                 methodNum = methodNames[0];
+                Toast.makeText(context, "文本框模式启动", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.VibratorMessage:
+                Toast.makeText(context, "震动模式启动", Toast.LENGTH_SHORT).show();
                 methodNum = methodNames[1];
                 break;
             case R.id.VideoMessage:
+                Toast.makeText(context, "语音模式启动", Toast.LENGTH_SHORT).show();
                 methodNum = methodNames[2];
                 break;
         }
