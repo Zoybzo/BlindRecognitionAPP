@@ -50,6 +50,10 @@ import myUtils.Enums;
 public class MainActivity extends AppCompatActivity {
     private static Enums.Method methodNum = Enums.Method.ToastMessage;
     private static final String PREFS_NAME = "MyPrefsFile";
+    private static final String NORMAL_USE = "需要允许授权才可正常使用";
+    private static final String PERMISSION_GET = "授权";
+    private static final String PERMISSION_DENY = "暂不授权";
+
     private SharedPreferences settings;
 
     private Context context = MainActivity.this;
@@ -215,25 +219,30 @@ public class MainActivity extends AppCompatActivity {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[i])) {
                     //选择禁止
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("授权");
-                    builder.setMessage("需要允许授权才可使用");
+                    builder.setTitle(PERMISSION_GET);
+                    builder.setMessage(NORMAL_USE);
                     String str = permissions[i];
-                    builder.setPositiveButton("去允许", (dialog, id) -> {
+                    builder.setPositiveButton(PERMISSION_GET, (dialog, id) -> {
                         if (mDialog != null && mDialog.isShowing()) {
                             mDialog.dismiss();
                         }
                         ActivityCompat.requestPermissions(MainActivity.this,
                                 new String[]{str}, 1);
                     });
+                    builder.setNegativeButton(PERMISSION_DENY, (dialog, id) -> {
+                        if (mDialog != null && mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
+                    });
                     mDialog = builder.create();
-                    mDialog.setCanceledOnTouchOutside(false);
+//                    mDialog.setCanceledOnTouchOutside(false);
                     mDialog.show();
                 } else {
                     //选择禁止并勾选禁止后不再询问
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("授权");
-                    builder.setMessage("需要允许授权才可使用");
-                    builder.setPositiveButton("去授权", (dialog, id) -> {
+                    builder.setTitle(PERMISSION_GET);
+                    builder.setMessage(NORMAL_USE);
+                    builder.setPositiveButton(PERMISSION_GET, (dialog, id) -> {
                         if (mDialog != null && mDialog.isShowing()) {
                             mDialog.dismiss();
                         }
@@ -243,8 +252,13 @@ public class MainActivity extends AppCompatActivity {
                         //调起应用设置页面
                         startActivityForResult(intent, 2);
                     });
+                    builder.setNegativeButton(PERMISSION_DENY, (dialog, id) -> {
+                        if (mDialog != null && mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
+                    });
                     mDialog = builder.create();
-                    mDialog.setCanceledOnTouchOutside(false);
+//                    mDialog.setCanceledOnTouchOutside(false);
                     mDialog.show();
                 }
             }
